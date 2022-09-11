@@ -12,10 +12,17 @@ export default function Home({ icons }) {
         </div>
     );
 }
-
-export async function getStaticProps(cont) {
+export async function getServerSideProps({ req }) {
+    console.log(req.query);
     const res = await axios.get("http://localhost:3000/api/hello");
     return {
         props: { icons: res.data.items.icons },
     };
 }
+
+// export async function getStaticProps(cont) {
+//     const res = await axios.get("http://localhost:3000/api/hello");
+//     return {
+//         props: { icons: res.data.items.icons },
+//     };
+// }
