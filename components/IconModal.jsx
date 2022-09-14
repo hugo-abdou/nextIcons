@@ -1,7 +1,7 @@
 import { RadioGroup, Switch } from "@headlessui/react";
 import SVGClass from "@iconify/json-tools/src/svg";
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import classNames from "../helpers/classNames";
 import Modal from "./Modal";
 
@@ -23,6 +23,7 @@ export default function IconModal({ open, close, icon }) {
     );
 
     const [svg, setSvg] = useState("");
+    const colorInput = useRef(null);
 
     const [store, setStore] = useState({
         hFlip: false,
@@ -42,7 +43,7 @@ export default function IconModal({ open, close, icon }) {
     return (
         <Modal open={open} close={close}>
             <div
-                className="aspect-square grid place-items-center"
+                className="aspect-square grid place-items-center relative"
                 dangerouslySetInnerHTML={{
                     __html: svg,
                 }}></div>
@@ -50,7 +51,7 @@ export default function IconModal({ open, close, icon }) {
                 <h1 className="text-xl font-semibold text-gray-800 mb-3">
                     {icon.name}
                 </h1>
-                <section className="py-3 gap-4 flex items-center justify-between text-gray-700">
+                <section className="py-3 gap-4 flex items-center  text-gray-700">
                     <label className="block text-sm font-medium text-gray-700">
                         Size
                     </label>
@@ -79,6 +80,46 @@ export default function IconModal({ open, close, icon }) {
                                     ...store,
                                     height: target.value,
                                     width: target.value,
+                                })
+                            }
+                        />
+                    </div>
+                    <div className="relative w-24">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
+                            <svg
+                                onClick={() => colorInput.current.click()}
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="1.5em"
+                                height="1.5em"
+                                preserveAspectRatio="xMidYMid meet"
+                                viewBox="0 0 24 24">
+                                <path
+                                    fill="currentColor"
+                                    d="M20 14c-.092.064-2 2.083-2 3.5c0 1.494.949 2.448 2 2.5c.906.044 2-.891 2-2.5c0-1.5-1.908-3.436-2-3.5zM9.586 20c.378.378.88.586 1.414.586s1.036-.208 1.414-.586l7-7l-.707-.707L11 4.586L8.707 2.293L7.293 3.707L9.586 6L4 11.586c-.378.378-.586.88-.586 1.414s.208 1.036.586 1.414L9.586 20zM11 7.414L16.586 13H5.414L11 7.414z"
+                                />
+                            </svg>
+                            <input
+                                ref={colorInput}
+                                className="opacity-0"
+                                type="color"
+                                value={store.color}
+                                onInput={({ target }) =>
+                                    setStore({
+                                        ...store,
+                                        color: target.value,
+                                    })
+                                }
+                            />
+                        </div>
+                        <input
+                            className="focus:ring-indigo-500 focus:border-indigo-500 block w-32 pl-10 sm:text-sm border-gray-300 rounded-md"
+                            placeholder="Color"
+                            type="text"
+                            value={store.color}
+                            onInput={({ target }) =>
+                                setStore({
+                                    ...store,
+                                    color: target.value,
                                 })
                             }
                         />
@@ -156,9 +197,6 @@ export default function IconModal({ open, close, icon }) {
                             })
                         }
                         className="mt-2">
-                        <RadioGroup.Label className="sr-only">
-                            Choose a memory option
-                        </RadioGroup.Label>
                         <div className="grid grid-cols-4 gap-3">
                             {[0, 1, 2, 3].map((option, i) => (
                                 <RadioGroup.Option
@@ -172,7 +210,7 @@ export default function IconModal({ open, close, icon }) {
                                             checked
                                                 ? "bg-indigo-600 border-transparent text-white hover:bg-indigo-700"
                                                 : "bg-white border-gray-200 text-gray-900 hover:bg-gray-50",
-                                            "border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium uppercase sm:flex-1 cursor-pointer focus:outline-none"
+                                            "border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium uppercase sm:flex-1 cursor-pointer focus:outline-none h-12"
                                         )
                                     }>
                                     <RadioGroup.Label as="div">
