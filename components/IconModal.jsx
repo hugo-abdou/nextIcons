@@ -19,8 +19,7 @@ const Icon = ({ icon, store, rotate, className }) => {
                     height: 20,
                     rotate,
                 }),
-            }}
-        ></div>
+            }}></div>
     );
 };
 
@@ -31,6 +30,10 @@ export default function IconModal({ open, close, icon }) {
     );
     const DownloadSvg = dynamic(
         () => import("./DownloadSvg").then((mod) => mod.DownloadSvg),
+        { ssr: false }
+    );
+    const DownloadPng = dynamic(
+        () => import("./DownloadPng").then((mod) => mod.DownloadPng),
         { ssr: false }
     );
 
@@ -44,11 +47,12 @@ export default function IconModal({ open, close, icon }) {
         rotate: 0,
         width: 100,
         color: "#414249",
+        id: "svgElement",
     });
     useEffect(() => {
         if (open) {
             const svgIcon = new SVGClass(icon);
-            setSvg(svgIcon.getSVG(store));
+            setSvg(svgIcon.getSVG(store, true));
         }
     }, [icon, store, open]);
 
@@ -59,8 +63,7 @@ export default function IconModal({ open, close, icon }) {
                     className="grid place-items-center relative flex-1"
                     dangerouslySetInnerHTML={{
                         __html: svg,
-                    }}
-                ></div>
+                    }}></div>
                 <div className="px-6 py-4 flex-1 sm:min-w-max">
                     <h1 className="text-xl font-semibold text-gray-800 mb-3">
                         {icon.name}
@@ -79,8 +82,7 @@ export default function IconModal({ open, close, icon }) {
                                                 width="1em"
                                                 height="1em"
                                                 preserveAspectRatio="xMidYMid meet"
-                                                viewBox="0 0 1200 1200"
-                                            >
+                                                viewBox="0 0 1200 1200">
                                                 <path
                                                     fill="currentColor"
                                                     d="M304.102 295.898L0 600l304.102 304.102v-203.54h591.797v203.539L1200 600L895.898 295.898v203.539H304.102V295.898z"
@@ -117,8 +119,7 @@ export default function IconModal({ open, close, icon }) {
                                                 width="1.5em"
                                                 height="1.5em"
                                                 preserveAspectRatio="xMidYMid meet"
-                                                viewBox="0 0 24 24"
-                                            >
+                                                viewBox="0 0 24 24">
                                                 <path
                                                     fill="currentColor"
                                                     d="M20 14c-.092.064-2 2.083-2 3.5c0 1.494.949 2.448 2 2.5c.906.044 2-.891 2-2.5c0-1.5-1.908-3.436-2-3.5zM9.586 20c.378.378.88.586 1.414.586s1.036-.208 1.414-.586l7-7l-.707-.707L11 4.586L8.707 2.293L7.293 3.707L9.586 6L4 11.586c-.378.378-.586.88-.586 1.414s.208 1.036.586 1.414L9.586 20zM11 7.414L16.586 13H5.414L11 7.414z"
@@ -170,8 +171,7 @@ export default function IconModal({ open, close, icon }) {
                                                 ? "bg-indigo-600"
                                                 : "bg-gray-200",
                                             "relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                        )}
-                                    >
+                                        )}>
                                         <span
                                             aria-hidden="true"
                                             className={classNames(
@@ -200,8 +200,7 @@ export default function IconModal({ open, close, icon }) {
                                                 ? "bg-indigo-600"
                                                 : "bg-gray-200",
                                             "relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                        )}
-                                    >
+                                        )}>
                                         <span
                                             aria-hidden="true"
                                             className={classNames(
@@ -230,8 +229,7 @@ export default function IconModal({ open, close, icon }) {
                                         rotate: value,
                                     })
                                 }
-                                className="mt-2"
-                            >
+                                className="mt-2">
                                 <div className="grid grid-cols-2 gap-3">
                                     {[0, 1, 2, 3].map((option, i) => (
                                         <RadioGroup.Option
@@ -247,8 +245,7 @@ export default function IconModal({ open, close, icon }) {
                                                         : "bg-white border-gray-200 text-gray-900 hover:bg-gray-50",
                                                     "border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium uppercase sm:flex-1 cursor-pointer focus:outline-none"
                                                 )
-                                            }
-                                        >
+                                            }>
                                             <RadioGroup.Label as="div">
                                                 {icon && (
                                                     <Icon
@@ -273,10 +270,15 @@ export default function IconModal({ open, close, icon }) {
                 <DownloadSvg
                     className="w-full text-center"
                     icon={icon}
-                    params={store}
-                >
-                    download
+                    params={store}>
+                    Download Svg
                 </DownloadSvg>
+                <DownloadPng
+                    className="w-full text-center"
+                    icon={icon}
+                    params={store}>
+                    Download Png
+                </DownloadPng>
             </div>
         </Modal>
     );
