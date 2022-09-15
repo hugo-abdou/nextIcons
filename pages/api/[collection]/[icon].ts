@@ -7,7 +7,7 @@ function generateSVG(icon: object, params?: object) {
     return svg.getSVG(params);
 }
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default function handler(req: any, res: any) {
     const collection = req.collections[req.query.collection];
     const icon = collection?.getIconData(req.query.icon);
     if (!collection || !icon) {
