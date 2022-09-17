@@ -3,25 +3,8 @@ import SVGClass from "@iconify/json-tools/src/svg";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import classNames from "../helpers/classNames";
+import Icon from "./Icon";
 import Modal from "./Modal";
-
-const Icon = ({ icon, store, rotate, className }) => {
-    const svgIcon = new SVGClass(icon);
-    const { hFlip, vFlip } = store;
-    return (
-        <div
-            className={className}
-            dangerouslySetInnerHTML={{
-                __html: svgIcon.getSVG({
-                    hFlip,
-                    vFlip,
-                    width: 20,
-                    height: 20,
-                    rotate,
-                }),
-            }}></div>
-    );
-};
 
 export default function IconModal({ open, close, icon }) {
     const CopyClipboard = dynamic(
@@ -38,6 +21,7 @@ export default function IconModal({ open, close, icon }) {
     );
 
     const [svg, setSvg] = useState("");
+    const [view, setView] = useState("svg");
     const colorInput = useRef(null);
 
     const [store, setStore] = useState({
@@ -59,11 +43,22 @@ export default function IconModal({ open, close, icon }) {
     return (
         <Modal open={open} close={close}>
             <div className="flex flex-col md:flex-row">
-                <div
-                    className="grid place-items-center relative flex-1"
-                    dangerouslySetInnerHTML={{
-                        __html: svg,
-                    }}></div>
+                <div className="grid place-items-center flex-1 overflow-auto max-h-[70vh] md:max-w-[40%] bg-gray-100 m-1 rounded shadow-inner relative">
+                    <button
+                        onClick={() => {
+                            setView(view == "svg" ? "code" : "svg");
+                        }}
+                        className="absolute top-2 left-2 bg-gray-900/20 s px-2 py-1 rounded shadow-md active:shadow-inner text-white"
+                    >
+                        {view == "svg" ? "Code" : "Svg"}
+                    </button>
+                    {view == "svg" && <Icon icon={icon} params={store} />}
+                    {view == "code" && (
+                        <div className="text-sm p-5 pt-12 whitespace-pre-wrap">
+                            {svg}
+                        </div>
+                    )}
+                </div>
                 <div className="px-6 py-4 flex-1 sm:min-w-max">
                     <h1 className="text-xl font-semibold text-gray-800 mb-3">
                         {icon.name}
@@ -82,7 +77,8 @@ export default function IconModal({ open, close, icon }) {
                                                 width="1em"
                                                 height="1em"
                                                 preserveAspectRatio="xMidYMid meet"
-                                                viewBox="0 0 1200 1200">
+                                                viewBox="0 0 1200 1200"
+                                            >
                                                 <path
                                                     fill="currentColor"
                                                     d="M304.102 295.898L0 600l304.102 304.102v-203.54h591.797v203.539L1200 600L895.898 295.898v203.539H304.102V295.898z"
@@ -119,7 +115,8 @@ export default function IconModal({ open, close, icon }) {
                                                 width="1.5em"
                                                 height="1.5em"
                                                 preserveAspectRatio="xMidYMid meet"
-                                                viewBox="0 0 24 24">
+                                                viewBox="0 0 24 24"
+                                            >
                                                 <path
                                                     fill="currentColor"
                                                     d="M20 14c-.092.064-2 2.083-2 3.5c0 1.494.949 2.448 2 2.5c.906.044 2-.891 2-2.5c0-1.5-1.908-3.436-2-3.5zM9.586 20c.378.378.88.586 1.414.586s1.036-.208 1.414-.586l7-7l-.707-.707L11 4.586L8.707 2.293L7.293 3.707L9.586 6L4 11.586c-.378.378-.586.88-.586 1.414s.208 1.036.586 1.414L9.586 20zM11 7.414L16.586 13H5.414L11 7.414z"
@@ -171,7 +168,8 @@ export default function IconModal({ open, close, icon }) {
                                                 ? "bg-indigo-600"
                                                 : "bg-gray-200",
                                             "relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                        )}>
+                                        )}
+                                    >
                                         <span
                                             aria-hidden="true"
                                             className={classNames(
@@ -200,7 +198,8 @@ export default function IconModal({ open, close, icon }) {
                                                 ? "bg-indigo-600"
                                                 : "bg-gray-200",
                                             "relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                        )}>
+                                        )}
+                                    >
                                         <span
                                             aria-hidden="true"
                                             className={classNames(
@@ -229,7 +228,8 @@ export default function IconModal({ open, close, icon }) {
                                         rotate: value,
                                     })
                                 }
-                                className="mt-2">
+                                className="mt-2"
+                            >
                                 <div className="grid grid-cols-2 gap-3">
                                     {[0, 1, 2, 3].map((option, i) => (
                                         <RadioGroup.Option
@@ -245,12 +245,18 @@ export default function IconModal({ open, close, icon }) {
                                                         : "bg-white border-gray-200 text-gray-900 hover:bg-gray-50",
                                                     "border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium uppercase sm:flex-1 cursor-pointer focus:outline-none"
                                                 )
-                                            }>
+                                            }
+                                        >
                                             <RadioGroup.Label as="div">
                                                 {icon && (
                                                     <Icon
                                                         icon={icon}
-                                                        store={store}
+                                                        params={{
+                                                            ...store,
+                                                            width: 20,
+                                                            height: 20,
+                                                            color: "currentColor",
+                                                        }}
                                                         rotate={i}
                                                     />
                                                 )}
@@ -270,13 +276,15 @@ export default function IconModal({ open, close, icon }) {
                 <DownloadSvg
                     className="w-full text-center"
                     icon={icon}
-                    params={store}>
+                    params={store}
+                >
                     Download Svg
                 </DownloadSvg>
                 <DownloadPng
                     className="w-full text-center"
                     icon={icon}
-                    params={store}>
+                    params={store}
+                >
                     Download Png
                 </DownloadPng>
             </div>
