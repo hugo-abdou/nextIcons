@@ -4,7 +4,8 @@ import IconModal from "../../components/IconModal";
 import classNames from "../../helpers/classNames";
 import Error from "../404";
 import axios from "axios";
-
+import { locate } from "@iconify/json";
+import { Collection } from "@iconify/json-tools";
 export default function Home({ errorCode, icons }) {
     const [selectedIcon, setIcon] = useState({});
 
@@ -74,10 +75,17 @@ export function getStaticPaths() {
 
 export async function getStaticProps({ params, query }) {
     try {
-        const res = await axios.get(
-            `http://localhost:3000/api/collections/${params.prifix}`
-        );
-        return { props: { icons: res.data } };
+        const collection = new Collection();
+        await collection.loadFromFileAsync(locate(params.prifix.toString()));
+        const icons = Object.keys(collection.items.icons)
+            .slice(0, 100)
+            .map((iconName, index) => {
+                return {
+                    ...collection.getIconData(iconName),
+                    name: iconName,
+                };
+            });
+        return { props: { icons } };
     } catch (error) {
         return {
             props: { errorCode: 404 },
