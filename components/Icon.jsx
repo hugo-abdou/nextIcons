@@ -7,7 +7,7 @@ export default function Icon({ icon, params, className }) {
             <div
                 className={className}
                 dangerouslySetInnerHTML={{
-                    __html: svgIcon.getSVG(params),
+                    __html: svgIcon.getSVG(params, true),
                 }}
             ></div>
         );

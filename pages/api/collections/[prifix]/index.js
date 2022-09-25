@@ -2,9 +2,9 @@ import { locate } from "@iconify/json";
 import { Collection } from "@iconify/json-tools";
 export default async function handler(req, res) {
     try {
-        const { prifix } = req.query;
+        const { prefix } = req.query;
         const collection = new Collection();
-        await collection.loadFromFileAsync(locate(prifix.toString()));
+        await collection.loadFromFileAsync(locate(prefix.toString()));
 
         const limit = parseInt(req.query.limit) || 15;
         const search = req.query.search;
