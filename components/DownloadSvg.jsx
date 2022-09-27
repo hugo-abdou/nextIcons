@@ -13,10 +13,11 @@ export const DownloadSvg = ({ icon, params, children, className }) => {
             )}
             onClick={() =>
                 download(
-                    `http://localhost:3005/${icon.prefix}/${icon.name}.svg?${paramsString}`,
+                    `${process.env.NEXT_PUBLIC_BACKEND_URL}/${icon.prefix}/${icon.name}.svg?${paramsString}`,
                     `${icon.name}.svg`
                 )
-            }>
+            }
+        >
             {children}
         </button>
     );
