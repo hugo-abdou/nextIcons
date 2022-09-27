@@ -1,5 +1,3 @@
-// import { locate, lookupCollections } from "@iconify/json";
-import SVG from "@iconify/json-tools/src/svg";
 import axios from "axios";
 import Link from "next/link";
 import Icon from "../components/Icon";
@@ -14,8 +12,7 @@ const Category = ({ category }) => {
                     </h1>
                     <span
                         className="mt-2 text-gray-500 capitalize group-hover:text-gray-300 text-sm hover:underline cursor-alias"
-                        href=""
-                    >
+                        href="">
                         Author : {category.info?.author.name}
                     </span>
                     <p className="mt-2 text-gray-500 capitalize  group-hover:text-gray-300 text-sm">
@@ -24,7 +21,10 @@ const Category = ({ category }) => {
                     <div className="flex mt-3 gap-2">
                         {category.icons.map((icon) => (
                             <Icon
-                                params={{ width: 30 }}
+                                params={{
+                                    width: 30,
+                                    height: 30,
+                                }}
                                 icon={icon}
                                 key={icon.name}
                             />
@@ -52,7 +52,7 @@ export default function Home({ collections }) {
 }
 export async function getStaticProps() {
     try {
-        const res = await axios.get("http://localhost:3001?limit=3");
+        const res = await axios.get("http://localhost:3005?limit=3");
 
         return {
             props: { collections: res.data },
