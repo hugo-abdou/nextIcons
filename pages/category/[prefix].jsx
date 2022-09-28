@@ -45,8 +45,7 @@ export default function Home({ errorCode, collection }) {
                     <section className="max-w-7xl mx-auto">
                         <ul
                             role="list"
-                            className="grid p-4 grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 "
-                        >
+                            className="grid p-4 grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 ">
                             {icons?.map((icon, i) => (
                                 <li
                                     key={i}
@@ -55,19 +54,16 @@ export default function Home({ errorCode, collection }) {
                                             ? "ring-2 ring-offset-2"
                                             : "focus-within:ring-2 focus-within:ring-offset-2",
                                         "group rounded-lg overflow-hidden  bg-white shadow relative"
-                                    )}
-                                >
+                                    )}>
                                     <div className="bg-white/20 absolute inset-0 backdrop-blur-sm  place-items-center hidden group-hover:grid ">
                                         <button
                                             onClick={() => setIcon(icon)}
-                                            className="w-14 bg-white p-4 rounded-full border shadow-md active:shadow-inner cursor-pointer"
-                                        >
+                                            className="w-14 bg-white p-4 rounded-full border shadow-md active:shadow-inner cursor-pointer">
                                             <svg
                                                 className="text-gray-700"
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 preserveAspectRatio="xMidYMid meet"
-                                                viewBox="0 0 576 512"
-                                            >
+                                                viewBox="0 0 576 512">
                                                 <path
                                                     fill="currentColor"
                                                     d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144a143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79a47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z"
@@ -93,8 +89,7 @@ export default function Home({ errorCode, collection }) {
                                 <button
                                     onClick={loadMore}
                                     type="button"
-                                    className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                >
+                                    className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     Load More
                                 </button>
                             </div>

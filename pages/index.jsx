@@ -1,5 +1,7 @@
 import axios from "axios";
+import { debounce } from "lodash";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import AppLayout from "../components/AppLayout";
 import Icon from "../components/Icon";
 
@@ -13,8 +15,7 @@ const Category = ({ category }) => {
                     </h1>
                     <span
                         className="mt-2 text-gray-500 capitalize group-hover:text-gray-300 text-sm hover:underline cursor-alias"
-                        href=""
-                    >
+                        href="">
                         Author : {category.info?.author.name}
                     </span>
                     <p className="mt-2 text-gray-500 capitalize  group-hover:text-gray-300 text-sm">
@@ -38,23 +39,32 @@ const Category = ({ category }) => {
     );
 };
 export default function Home({ collections }) {
-    function onSearch(event) {
-        console.log(event.target.value);
-    }
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        setData(collections);
+    }, [collections]);
+    const onSearch = debounce(async (event) => {
+        try {
+            const res = await axios.get(
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}?limit=5&search=${event.target.value}`
+            );
+            setData(res.data);
+        } catch (error) {
+            console.error(error);
+        }
+    });
     return (
         <AppLayout onSearch={onSearch}>
             <section className="max-w-7xl mx-auto">
                 <ul className="flex p-4 flex-wrap">
-                    {collections &&
-                        collections.map(
-                            (collection, index) =>
-                                collection && (
-                                    <Category
-                                        key={index}
-                                        category={collection}
-                                    />
-                                )
-                        )}
+                    {data.map((collection, index) => {
+                        if (collection.icons.length) {
+                            return (
+                                <Category key={index} category={collection} />
+                            );
+                        }
+                    })}
                 </ul>
             </section>
         </AppLayout>
